@@ -9,9 +9,6 @@ if (!isset($_SESSION['professor_id'])) {
 
 // Conecta com o banco de dados
 include '../conexao.php';
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
 
 // Verifica se o ID do aluno foi passado
 if (!isset($_GET['id'])) {
@@ -23,10 +20,10 @@ $aluno_id = intval($_GET['id']); // segurança: garantir que é número inteiro
 
 // Atualiza os dados se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nome = $conn->real_escape_string($_POST['nome']);
-    $ano = $conn->real_escape_string($_POST['ano']);
-    $sala = strtoupper($conn->real_escape_string($_POST['sala']));
-    $email = $conn->real_escape_string($_POST['email']);
+    $nome = $_POST['nome'];
+    $ano = $_POST['ano'];
+    $sala = strtoupper($_POST['sala']);
+    $email = $_POST['email'];
 
     // Concatenar o ano e a sala para formar a série
     if (in_array($ano, ['1', '2', '3'])) {
@@ -35,13 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $serie = $ano . 'º Ano ' . $sala;
     }
 
-    // Atualiza os dados no banco
-    $sql = "UPDATE aluno SET nome='$nome', serie='$serie', email='$email' WHERE id=$aluno_id";
-
-    if ($conn->query($sql) === TRUE) {
+    // Atualiza os dados no banco usando prepared statement
+    $sql = "UPDATE aluno SET nome=?, serie=?, email=? WHERE id=?";
+    $stmt = $pdo->prepare($sql);
+    
+    if ($stmt->execute([$nome, $serie, $email, $aluno_id])) {
         $_SESSION['mensagem_editar_aluno'] = "<p style='color: green;'>Dados atualizados com sucesso!</p>";
     } else {
-        $_SESSION['mensagem_editar_aluno'] = "<p style='color: red;'>Erro ao atualizar: " . $conn->error . "</p>";
+        $errorInfo = $stmt->errorInfo();
+        $_SESSION['mensagem_editar_aluno'] = "<p style='color: red;'>Erro ao atualizar: " . $errorInfo[2] . "</p>";
     }
 
     // Redireciona para a página de edição para mostrar a mensagem
@@ -50,15 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Busca os dados do aluno para exibir no formulário (GET)
-$sql = "SELECT * FROM aluno WHERE id=$aluno_id";
-$result = $conn->query($sql);
+$sql = "SELECT * FROM aluno WHERE id=?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$aluno_id]);
+$aluno = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($result->num_rows != 1) {
+if (!$aluno) {
     echo "Aluno não encontrado.";
     exit();
 }
-
-$aluno = $result->fetch_assoc();
 
 // Extrai o ano e a sala da série
 preg_match('/(\d+)º Ano\s*(EM\s*)?(\w+)/', $aluno['serie'], $match);

@@ -10,22 +10,15 @@ if (!$token) {
     die("Token inválido.");
 }
 
-if ($conn->connect_error) {
-    die("Falha na conexão com o banco de dados: " . $conn->connect_error);
-}
-
 // Verifica se token existe e não expirou
 $sql = "SELECT id FROM professor WHERE token_recuperacao = ? AND token_expiracao > NOW()";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $token);
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$token]);
+$professor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($result->num_rows !== 1) {
+if (!$professor) {
     die("Token inválido ou expirado.");
 }
-
-$professor = $result->fetch_assoc();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $senha = $_POST['senha'] ?? '';
@@ -40,9 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $hash = password_hash($senha, PASSWORD_DEFAULT);
 
         $sql_update = "UPDATE professor SET senha = ?, token_recuperacao = NULL, token_expiracao = NULL WHERE id = ?";
-        $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param("si", $hash, $professor['id']);
-        if ($stmt_update->execute()) {
+        $stmt_update = $pdo->prepare($sql_update);
+        if ($stmt_update->execute([$hash, $professor['id']])) {
             $sucesso = "Senha redefinida com sucesso! Você já pode fazer login.";
         } else {
             $erro = "Erro ao atualizar a senha.";

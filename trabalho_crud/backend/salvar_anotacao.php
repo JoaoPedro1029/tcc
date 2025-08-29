@@ -17,18 +17,20 @@ if (!isset($_POST['texto'])) {
 }
 
 $id_professor = $_SESSION['professor_id'];
-$texto = $conn->real_escape_string($_POST['texto']);
+$texto = $_POST['texto'];
 $data_atual = date('Y-m-d H:i:s');
 
-$sql = "INSERT INTO anotacoes (texto, data, id_professor) VALUES ('$texto', '$data_atual', $id_professor)";
+$sql = "INSERT INTO anotacoes (texto, data, id_professor) VALUES (?, ?, ?)";
+$stmt = $pdo->prepare($sql);
 
-if ($conn->query($sql) === TRUE) {
+if ($stmt->execute([$texto, $data_atual, $id_professor])) {
     echo json_encode(['success' => true, 'message' => 'Anotação salva com sucesso']);
 } else {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Erro: ' . $conn->error]);
+    $errorInfo = $stmt->errorInfo();
+    echo json_encode(['success' => false, 'message' => 'Erro: ' . $errorInfo[2]]);
 }
 
-$conn->close();
+$pdo = null;
 
 ?>

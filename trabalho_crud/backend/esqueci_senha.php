@@ -21,23 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Verifica se existe professor com CPF e email
         $sql = "SELECT * FROM professor WHERE cpf = ? AND email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $cpf, $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$cpf, $email]);
+        $professor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result->num_rows === 1) {
-            $professor = $result->fetch_assoc();
-
+        if ($professor) {
             // Gera token seguro
             $token = bin2hex(random_bytes(32));
             $expiracao = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
             // Salva token no banco
             $sqlInsert = "INSERT INTO professor_reset_senha (professor_id, token, expiracao) VALUES (?, ?, ?)";
-            $stmtInsert = $conn->prepare($sqlInsert);
-            $stmtInsert->bind_param("iss", $professor['id'], $token, $expiracao);
-            $stmtInsert->execute();
+            $stmtInsert = $pdo->prepare($sqlInsert);
+            $stmtInsert->execute([$professor['id'], $token, $expiracao]);
 
             // Monta link de reset
             $url = "http://localhost/mateus-1/professor/nova_senha.php?token=$token";

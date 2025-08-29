@@ -1,24 +1,22 @@
 <?php
 include '../conexao.php';
 
-if ($conn->connect_error) {
-    die("Falha na conexão com o banco de dados: " . $conn->connect_error);
-}
+$termo = isset($_GET['term']) ? $_GET['term'] : '';
 
-$termo = isset($_GET['term']) ? $conn->real_escape_string($_GET['term']) : '';
+$sql = "SELECT id, nome FROM aluno WHERE nome LIKE :termo";
 
-$sql = "SELECT id, nome FROM aluno WHERE nome LIKE '$termo%'";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['termo' => $termo . '%']);
 
-$resultado = $conn->query($sql);
+$alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$alunos = [];
-
-while ($row = $resultado->fetch_assoc()) {
-    $alunos[] = [
+$results = [];
+foreach ($alunos as $row) {
+    $results[] = [
         'id' => $row['id'],     // esse valor vai no form
         'text' => $row['nome']  // esse valor aparece pro usuário
     ];
 }
 
 header('Content-Type: application/json');
-echo json_encode($alunos);
+echo json_encode($results);

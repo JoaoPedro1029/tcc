@@ -85,7 +85,7 @@ include '../backend/cadastrar_professor.php';
                 <div class="invalid-feedback">Use apenas letras minúsculas e números (8-16 caracteres).</div>
             </div>
 
-            <button type="submit" class="btn btn-gradient w-100">Cadastrar Professor</button>
+            <button type="submit" class="btn">Cadastrar Professor</button>
         </form>
     </div>
 

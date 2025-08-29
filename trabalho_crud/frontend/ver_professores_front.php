@@ -1,5 +1,10 @@
 <?php
+// session_start();
 include '../backend/ver_professores.php';
+
+// Obter os professores da sessão
+$professores = isset($_SESSION['professores']) ? $_SESSION['professores'] : array();
+unset($_SESSION['professores']); // Limpar a sessão após usar
 ?>
 
 <!DOCTYPE html>
@@ -53,12 +58,12 @@ include '../backend/ver_professores.php';
 
 
     <!-- Cadastrar professor -->
-    <div class="mt-3 text-end">
-        <a href="cadastrar_professor_front.php" class="link-registrar">Cadastrar Professor</a>
-    </div>
 
     <div class="container mt-5">
-        <h2 class="text-center">LIsta de Professores</h2>
+        <h2 class="text-center">Lista de Professores</h2>
+        <div class="mt-3 text-end">
+        <a href="cadastrar_professor_front.php" class="btn">Cadastrar Professor</a>
+    </div>
 
         <div class="table-container">
             <table id="emprestimosTable" class="table table-striped">
@@ -79,16 +84,15 @@ include '../backend/ver_professores.php';
                         return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "$1.$2.$3-$4", $cpf);
                     }
 
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td class='scrollable-cell'>" . $row['nome'] . "</td>";
-                        echo "<td class='scrollable-cell'>" . $row['email'] . "</td>";
-                        echo "<td class='scrollable-cell'>" . formatarCPF($row['cpf']) . "</td>";
-                        echo "<td class='scrollable-cell'><a href='editar_prof_front.php?id=" . $row['id'] . "' class='edit-link'>Editar</a></td>";
-                        echo "<td class='scrollable-cell'><a href='?remover=" . $row['id'] . "' class='delete-link' onclick='return confirm(\"Tem certeza de que deseja remover este professor?\")'>Remover</a></td>";
-                        echo "</tr>";
-                    }
-                    ?>
+                    foreach ($professores as $professor): ?>
+                        <tr>
+                            <td class='scrollable-cell'><?php echo htmlspecialchars($professor['nome']); ?></td>
+                            <td class='scrollable-cell'><?php echo htmlspecialchars($professor['email']); ?></td>
+                            <td class='scrollable-cell'><?php echo formatarCPF($professor['cpf']); ?></td>
+                            <td class='scrollable-cell'><a href='editar_prof_front.php?id=<?php echo $professor['id']; ?>' class='edit-link'>Editar</a></td>
+                            <td class='scrollable-cell'><a href='?remover=<?php echo $professor['id']; ?>' class='delete-link' onclick='return confirm("Tem certeza de que deseja remover este professor?")'>Remover</a></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

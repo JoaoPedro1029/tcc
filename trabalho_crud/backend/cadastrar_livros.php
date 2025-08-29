@@ -80,44 +80,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 include '../conexao.php';
 
-                if ($conn->connect_error) {
-                    die("Falha na conexão com o banco de dados: " . $conn->connect_error);
-                }
-
-                $titulo = isset($livro['title']) ? $conn->real_escape_string($livro['title']) : 'Título não disponível';
-
-                if (isset($livro['authors'])) {
-                    $autor = implode(', ', array_map([$conn, 'real_escape_string'], $livro['authors']));
-                } else {
-                    $autor = 'Autor desconhecido';
-                }
-
+                $titulo = isset($livro['title']) ? $livro['title'] : 'Título não disponível';
+                $autor = isset($livro['authors']) ? implode(', ', $livro['authors']) : 'Autor desconhecido';
                 $isbn = '';
                 if (isset($livro['industryIdentifiers']) && count($livro['industryIdentifiers']) > 0) {
-                    $isbn = $conn->real_escape_string($livro['industryIdentifiers'][0]['identifier']);
+                    $isbn = $livro['industryIdentifiers'][0]['identifier'];
                 }
 
                 if (!empty($isbn)) {
-                    $sql_check = "SELECT * FROM livro WHERE isbn = '$isbn' LIMIT 1";
+                    $sql_check = "SELECT * FROM livro WHERE isbn = ? LIMIT 1";
+                    $stmt_check = $pdo->prepare($sql_check);
+                    $stmt_check->execute([$isbn]);
+                    $result_check = $stmt_check->fetchAll();
                 } else {
-                    $sql_check = "SELECT * FROM livro WHERE nome_livro = '$titulo' AND nome_autor = '$autor' LIMIT 1";
+                    $sql_check = "SELECT * FROM livro WHERE nome_livro = ? AND nome_autor = ? LIMIT 1";
+                    $stmt_check = $pdo->prepare($sql_check);
+                    $stmt_check->execute([$titulo, $autor]);
+                    $result_check = $stmt_check->fetchAll();
                 }
 
-                $result_check = $conn->query($sql_check);
-
-                if ($result_check->num_rows > 0) {
+                if (count($result_check) > 0) {
                     $_SESSION['mensagem_livro'] = "<p style='color: orange;'>Este livro já está cadastrado.</p>";
                 } else {
-                    $sql_insert = "INSERT INTO livro (nome_livro, nome_autor, isbn) VALUES ('$titulo', '$autor', '$isbn')";
-
-                    if ($conn->query($sql_insert) === TRUE) {
+                    $sql_insert = "INSERT INTO livro (nome_livro, nome_autor, isbn) VALUES (?, ?, ?)";
+                    $stmt_insert = $pdo->prepare($sql_insert);
+                    
+                    if ($stmt_insert->execute([$titulo, $autor, $isbn])) {
                         $_SESSION['mensagem_livro'] = "<p style='color: green;'>Livro adicionado com sucesso!</p>";
                     } else {
-                        $_SESSION['mensagem_livro'] = "<p style='color: red;'>Erro ao adicionar o livro: " . $conn->error . "</p>";
+                        $errorInfo = $stmt_insert->errorInfo();
+                        $_SESSION['mensagem_livro'] = "<p style='color: red;'>Erro ao adicionar o livro: " . $errorInfo[2] . "</p>";
                     }
                 }
 
-                $conn->close();
+                $pdo = null;
 
             } else {
                 $_SESSION['mensagem_livro'] = "<p style='color: red;'>Livro não encontrado nos resultados.</p>";
@@ -135,31 +131,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         include '../conexao.php';
 
-        if ($conn->connect_error) {
-            die("Falha na conexão com o banco de dados: " . $conn->connect_error);
-        }
-
-        $titulo = $conn->real_escape_string(trim($_POST['manual_titulo']));
-        $autor = $conn->real_escape_string(trim($_POST['manual_autor']));
+        $titulo = trim($_POST['manual_titulo']);
+        $autor = trim($_POST['manual_autor']);
         $isbn = ''; // ISBN não é obrigatório no manual
 
         // Verifica se já existe esse livro
-        $sql_check = "SELECT * FROM livro WHERE nome_livro = '$titulo' AND nome_autor = '$autor' LIMIT 1";
-        $result_check = $conn->query($sql_check);
+        $sql_check = "SELECT * FROM livro WHERE nome_livro = ? AND nome_autor = ? LIMIT 1";
+        $stmt_check = $pdo->prepare($sql_check);
+        $stmt_check->execute([$titulo, $autor]);
+        $result_check = $stmt_check->fetchAll();
 
-        if ($result_check->num_rows > 0) {
+        if (count($result_check) > 0) {
             $_SESSION['mensagem_livro'] = "<p style='color: orange;'>Este livro já está cadastrado.</p>";
         } else {
-            $sql_insert = "INSERT INTO livro (nome_livro, nome_autor, isbn) VALUES ('$titulo', '$autor', '$isbn')";
-
-            if ($conn->query($sql_insert) === TRUE) {
+            $sql_insert = "INSERT INTO livro (nome_livro, nome_autor, isbn) VALUES (?, ?, ?)";
+            $stmt_insert = $pdo->prepare($sql_insert);
+            
+            if ($stmt_insert->execute([$titulo, $autor, $isbn])) {
                 $_SESSION['mensagem_livro'] = "<p style='color: green;'>Livro adicionado com sucesso!</p>";
             } else {
-                $_SESSION['mensagem_livro'] = "<p style='color: red;'>Erro ao adicionar o livro: " . $conn->error . "</p>";
+                $errorInfo = $stmt_insert->errorInfo();
+                $_SESSION['mensagem_livro'] = "<p style='color: red;'>Erro ao adicionar o livro: " . $errorInfo[2] . "</p>";
             }
         }
 
-        $conn->close();
+        $pdo = null;
 
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();

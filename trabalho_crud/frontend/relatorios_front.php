@@ -39,8 +39,8 @@ include '../backend/relatorios.php';
           role: 'annotation'
         }],
         <?php
-        if ($resultAlunos->num_rows > 0) {
-          while ($row = $resultAlunos->fetch_assoc()) {
+        if ($temAlunos) {
+          foreach ($alunosData as $row) {
             $nome = addslashes($row['aluno_nome']);
             $total = (int)$row['total'];
             echo "['$nome', $total, '$total'],";
@@ -48,7 +48,6 @@ include '../backend/relatorios.php';
         }
         ?>
       ]);
-
 
       var options = {
         titleTextStyle: {
@@ -84,8 +83,8 @@ include '../backend/relatorios.php';
           role: 'annotation'
         }],
         <?php
-        if ($resultLivros->num_rows > 0) {
-          while ($row = $resultLivros->fetch_assoc()) {
+        if ($temLivros) {
+          foreach ($livrosData as $row) {
             $nome = addslashes($row['nome_livro']);
             $total = (int)$row['total'];
             echo "['$nome', $total, '$total'],";
@@ -93,7 +92,6 @@ include '../backend/relatorios.php';
         }
         ?>
       ]);
-
 
       var options = {
         titleTextStyle: {
@@ -129,8 +127,8 @@ include '../backend/relatorios.php';
           role: 'annotation'
         }],
         <?php
-        if ($resultSeries->num_rows > 0) {
-          while ($row = $resultSeries->fetch_assoc()) {
+        if ($temSeries) {
+          foreach ($seriesData as $row) {
             $nome = addslashes($row['serie']);
             $total = (int)$row['total'];
             echo "['$nome', $total, '$total'],";
@@ -138,7 +136,6 @@ include '../backend/relatorios.php';
         }
         ?>
       ]);
-
 
       var options = {
         titleTextStyle: {
@@ -181,7 +178,7 @@ include '../backend/relatorios.php';
 
   <!-- Voltar à página anterior -->
   <div class="mt-3 text-start">
-    <a href="#" onclick="goBack()" class="link-back">&lt; Voltar</a>
+    <a href="#" onclick="goBack()" class="link-back">< Voltar</a>
   </div>
 
   <script>
@@ -222,8 +219,8 @@ include '../backend/relatorios.php';
     <!-- BARRA LATERAL -->
     <div class="barra-lateral">
       <div class="lista-observacoes">
-        <?php if ($resultNotas->num_rows > 0): ?>
-          <?php while ($nota = $resultNotas->fetch_assoc()): ?>
+        <?php if ($temNotas): ?>
+          <?php foreach ($notasData as $nota): ?>
             <div class="card">
               <button class="btn-excluir" data-id="<?php echo $nota['id']; ?>">x</button>
               <div class="card-header">
@@ -236,7 +233,7 @@ include '../backend/relatorios.php';
                 <p class="card-text"><?php echo nl2br(htmlspecialchars($nota['texto'])); ?></p>
               </div>
             </div>
-          <?php endwhile; ?>
+          <?php endforeach; ?>
         <?php else: ?>
           <div class="alert alert-warning">Nenhuma anotação encontrada.</div>
         <?php endif; ?>
@@ -253,10 +250,8 @@ include '../backend/relatorios.php';
           </div>
         </form>
       </div>
-
-
     </div>
-</body>
+  </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -276,8 +271,9 @@ include '../backend/relatorios.php';
 <script src="../interatividade/devtools_block.js"></script>
 <script src="../interatividade/anotacoes.js"></script>
 
+</body>
 </html>
 
 <?php
-$conn->close();
+$pdo = null;
 ?>

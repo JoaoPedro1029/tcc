@@ -17,14 +17,16 @@ if (!isset($_POST['id'])) {
 }
 
 $id = intval($_POST['id']);
-$sql = "DELETE FROM anotacoes WHERE id = $id";
+$sql = "DELETE FROM anotacoes WHERE id = ?";
+$stmt = $pdo->prepare($sql);
 
-if ($conn->query($sql) === TRUE) {
+if ($stmt->execute([$id])) {
     echo json_encode(['success' => true, 'message' => 'Anotação excluída com sucesso']);
 } else {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Erro: ' . $conn->error]);
+    $errorInfo = $stmt->errorInfo();
+    echo json_encode(['success' => false, 'message' => 'Erro: ' . $errorInfo[2]]);
 }
 
-$conn->close();
+$pdo = null;
 ?>

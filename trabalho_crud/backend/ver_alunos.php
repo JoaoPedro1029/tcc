@@ -10,25 +10,23 @@ if (!isset($_SESSION['professor_id'])) {
 // Conectar com o banco de dados
 include '../conexao.php';
 
-// Verifica a conexão
-if ($conn->connect_error) {
-    die("Falha na conexão com o banco de dados: " . $conn->connect_error);
-}
-
 // Verifica se foi solicitado remover um aluno
 if (isset($_GET['remover'])) {
     $aluno_id = $_GET['remover'];
 
     // Verifica se o aluno está em algum empréstimo
-    $check_emprestimo = "SELECT * FROM emprestimo WHERE id_aluno = $aluno_id";
-    $result_check = $conn->query($check_emprestimo);
+    $check_emprestimo = "SELECT * FROM emprestimo WHERE id_aluno = ?";
+    $stmt_check = $pdo->prepare($check_emprestimo);
+    $stmt_check->execute([$aluno_id]);
+    $result_check = $stmt_check->fetchAll();
 
-    if ($result_check->num_rows > 0) {
+    if (count($result_check) > 0) {
         echo "<script>alert('O aluno está registrado em um empréstimo. Primeiro remova o empréstimo para depois excluir o aluno.');</script>";
     } else {
         // Remove o aluno
-        $sql_remover = "DELETE FROM aluno WHERE id = $aluno_id";
-        $conn->query($sql_remover);
+        $sql_remover = "DELETE FROM aluno WHERE id = ?";
+        $stmt_remover = $pdo->prepare($sql_remover);
+        $stmt_remover->execute([$aluno_id]);
 
         // Redireciona silenciosamente após exclusão
         header("Location: ../frontend/ver_alunos_front.php");
@@ -38,8 +36,9 @@ if (isset($_GET['remover'])) {
 
 // Consulta para buscar todos os alunos
 $sql = "SELECT * FROM aluno";
-$result = $conn->query($sql);
+$stmt = $pdo->query($sql);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fechar a conexão
-$conn->close();
+$pdo = null;
 ?>
