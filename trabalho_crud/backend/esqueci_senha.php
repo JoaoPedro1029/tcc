@@ -2,10 +2,7 @@
 session_start();
 require '../conexao.php'; // conexão com banco
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
-require '../../vendor/autoload.php'; // carregando o composer e PHPMailer
 
 $erro = '';
 $sucesso = '';
@@ -38,31 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Monta link de reset
             $url = "http://localhost/mateus-1/professor/nova_senha.php?token=$token";
 
-            // Envia e-mail
-            $mail = new PHPMailer(true);
+            // Envia e-mail usando mail() nativo do PHP
+            $to = $professor['email'];
+            $subject = 'Recuperação de Senha';
+            $message = "Olá, <br> Clique no link abaixo para redefinir sua senha: <br><a href='$url'>$url</a><br>O link expira em 1 hora.";
+            $headers = "From: seu_email@gmail.com\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
-            try {
-                // Configuração SMTP (exemplo Gmail, ajuste conforme seu servidor)
-                $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = 'seu_email@gmail.com';
-                $mail->Password = 'sua_senha_de_app'; // use senha de app se for Gmail
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                $mail->Port = 587;
-
-                $mail->setFrom('seu_email@gmail.com', 'Sua Aplicação');
-                $mail->addAddress($professor['email'], $professor['nome']);
-
-                $mail->isHTML(true);
-                $mail->Subject = 'Recuperação de Senha';
-                $mail->Body = "Olá, <br> Clique no link abaixo para redefinir sua senha: <br><a href='$url'>$url</a><br>O link expira em 1 hora.";
-
-                $mail->send();
-
+            if (mail($to, $subject, $message, $headers)) {
                 $sucesso = "Um e-mail para redefinição de senha foi enviado para $email.";
-            } catch (Exception $e) {
-                $erro = "Erro ao enviar e-mail: {$mail->ErrorInfo}";
+            } else {
+                $erro = "Erro ao enviar e-mail.";
             }
 
         } else {
