@@ -1,6 +1,6 @@
 /* Reset básico */
 body {
-    background-color: #f4f4f4;
+    background: linear-gradient(to right, #53b4ff, #2032cf);
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -15,21 +15,22 @@ body {
 .header {
     position: fixed;
     width: 100%;
-    background-color: #004080;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     text-align: center;
     padding: 20px;
     font-size: 26px;
     font-weight: bold;
-    position: fixed;
     top: 0;
     left: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
     z-index: 900;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    backdrop-filter: blur(10px);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Se quiser permitir que o link seja selecionável (opcional) */
@@ -55,21 +56,18 @@ body {
 .sidebar {
     position: fixed;
     top: 79px;
-    /* Ajuste este valor para a altura da navbar */
     right: -250px;
-    /* Inicialmente escondido */
     width: 250px;
     height: calc(100% - 70px);
-    /* Ajuste a altura para ocupar o restante da tela */
     color: white;
     padding: 20px;
     transition: right 0.3s ease;
     z-index: 1000;
-    /* Para garantir que fique sobre outros elementos */
-    position: fixed;
-    background-color: #263238;
-    transition: right 0.3s ease-in-out;
+    background: linear-gradient(135deg, #535f93 0%, #36468f 100%);
     padding-top: 30px;
+    box-shadow: -5px 0 25px rgba(102, 126, 234, 0.3);
+    backdrop-filter: blur(15px);
+    border-left: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 .sidebar.open {
@@ -110,31 +108,21 @@ body {
 }
 
 .sidebar a {
-    color: rgb(255, 255, 255);
-    /* Cor do texto */
+    color: #ffffff;
     text-decoration: none;
-    /* Remove o sublinhado */
     font-size: 18px;
-    /* Tamanho da fonte */
-    padding: 3px 0;
-    /* Espaço ao redor do texto */
-    display: block;
-    /* Faz com que o link ocupe toda a largura do item da lista */
-    transition: color 0.3s ease;
-    /* Transição suave para a cor */
-}
-
-.sidebar a {
     padding: 12px 20px;
-    text-decoration: none;
-    font-size: 18px;
-    color: white;
     display: block;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 5px 0;
 }
 
 .sidebar a:hover {
-    background-color: #37474f;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    color: #ffffff;
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar .closebtn {
@@ -146,32 +134,55 @@ body {
     cursor: pointer;
 }
 
-/* Link para voltar */
+/* Botão para voltar */
 .link-back {
-    color: black;
-    font-size: 20px;
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+    color: white;
     text-decoration: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
     position: fixed;
     top: 100px;
     left: 20px;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+    border: none;
+    z-index: 800;
 }
 
 .link-back.responsive-link {
     display: none;
-    color: black;
-    font-size: 20px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+    color: white;
     text-decoration: none;
-     position: fixed;
-    top: 100px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    position: fixed;
+    top: 80px;
     left: 20px;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+    border: none;
+    z-index: 800;
 }
 
 .link-back:hover {
-    text-decoration: underline;
+    background: linear-gradient(135deg, #5c4fc9 0%, #8c7ae6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(108, 92, 231, 0.4);
+    text-decoration: none;
+}
+
+.link-back:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(108, 92, 231, 0.3);
 }
 
 #logoutLink {
@@ -214,11 +225,27 @@ body {
 
     .link-back.responsive-link {
         display: block;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
         position: fixed;
         top: 80px;
         left: 20px;
-        font-size: 20px;
-        color: black;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        border: none;
+        z-index: 800;
+    }
+    
+    .link-back.responsive-link:hover {
+        background: linear-gradient(135deg, #5c4fc9 0%, #8c7ae6 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(108, 92, 231, 0.4);
         text-decoration: none;
     }
 }
