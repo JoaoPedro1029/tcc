@@ -111,6 +111,10 @@ include '../backend/cadastrar_livros.php';
         </form>
     </div>
 
+    <!-- Botão para ver livros cadastrados -->
+        <a href="ver_livros_front.php" class="btn">Ver Livros Cadastrados</a>
+    
+
 
 
     <script>

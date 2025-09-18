@@ -88,10 +88,10 @@ include '../backend/cadastrar_aluno.php';
                 <input type="email" name="email" id="email" class="form-control" autocomplete="off" required>
             </div>
 
-            <button type="submit" class="btn btn-gradient w-100">Cadastrar</button>
+            <button type="submit" class="btn">Cadastrar</button>
         </form>
     </div>
-
+    
     <script>
         document.getElementById('sala').addEventListener('input', function() {
             this.value = this.value.toUpperCase();

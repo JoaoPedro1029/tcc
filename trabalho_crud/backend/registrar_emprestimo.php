@@ -11,11 +11,6 @@ if (!isset($_SESSION['professor_id'])) {
 }
 
 include '../conexao.php';
-$conn->set_charset("utf8");
-
-if ($conn->connect_error) {
-    die("Falha na conexão com o banco de dados: " . $conn->connect_error);
-}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id_aluno = $_POST['id_aluno'];
@@ -28,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!$data_emprestimo || !$data_devolucao) {
         $_SESSION['mensagem_emprestimo'] = "<p style='color: red;'>Formato de data inválido.</p>";
-        header("Location: ../frontend/registrar_emprestimo_front.php"); // ajuste o caminho da página do formulário
+        header("Location: ../frontend/registrar_emprestimo_front.php");
         exit();
     }
 
@@ -38,24 +33,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($data_devolucao < $data_emprestimo) {
         $_SESSION['mensagem_emprestimo'] = "<p style='color: red;'>A data de devolução não pode ser anterior à data de empréstimo.</p>";
-        header("Location: ../frontend/registrar_emprestimo_front.php"); // ajuste o caminho da página do formulário
+        header("Location: ../frontend/registrar_emprestimo_front.php");
         exit();
     }
 
     $status = 0; // Definindo o status do empréstimo como em andamento
 
     $sql = "INSERT INTO emprestimo (id_aluno, id_professor, id_livro, data_emprestimo, data_devolucao, status)
-        VALUES ('$id_aluno', '$id_professor', '$id_livro', '$data_emprestimo', '$data_devolucao', '$status')";
+        VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $pdo->prepare($sql);
 
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->execute([$id_aluno, $id_professor, $id_livro, $data_emprestimo, $data_devolucao, $status])) {
         $_SESSION['mensagem_emprestimo'] = "<p style='color: green;'>Empréstimo registrado com sucesso!</p>";
     } else {
-        $_SESSION['mensagem_emprestimo'] = "<p style='color: red;'>Erro ao registrar o empréstimo: " . $conn->error . "</p>";
+        $errorInfo = $stmt->errorInfo();
+        $_SESSION['mensagem_emprestimo'] = "<p style='color: red;'>Erro ao registrar o empréstimo: " . $errorInfo[2] . "</p>";
     }
 
-    header("Location: ../frontend/registrar_emprestimo_front.php"); // ajuste o caminho da página do formulário
+    header("Location: ../frontend/registrar_emprestimo_front.php");
     exit();
 }
 
-$conn->close();
+$pdo = null;
 ?>

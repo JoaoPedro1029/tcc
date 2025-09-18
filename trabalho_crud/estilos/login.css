@@ -1,5 +1,6 @@
 body {
     background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
     margin: 0;
     padding: 0;
     background-size: cover;
@@ -52,6 +53,31 @@ body {
     background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
     transform: rotate(45deg);
     pointer-events: none;
+    background: linear-gradient(135deg, #92afed 0%, #185a9d 100%);
+    width: 90%;
+    max-width: 400px;
+    height: auto;
+    padding: 76px;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(67, 206, 162, 0.3);
+    text-align: center;
+    font-size: 30px;
+    margin-top: 50px;
+    border: none;
+    backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
+}
+.container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    transform: rotate(45deg);
+    pointer-events: none;
 }
 
 h1 {
@@ -63,16 +89,29 @@ h1 {
 .form-label {
     font-weight: bold;
     margin-bottom: 10px;
+    margin-bottom: 10px;
     display: block;
     color: #555;
+    text-align: left;
     text-align: left;
 }
 
 .form-control {
     width: 100%;
     padding: 16px;
+    padding: 16px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #0073e6;
+    outline: none;
     border-radius: 10px;
     font-size: 18px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -89,7 +128,17 @@ h1 {
     display: inline-block;
     padding: 10px 20px;
     background: linear-gradient(to right, #004080, #0073e6);
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(to right, #004080, #0073e6);
     color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-decoration: none;
     border-radius: 10px;
     font-size: 16px;
@@ -99,9 +148,14 @@ h1 {
     border: none;
     width: 100%;
     font-weight: 600;
+    font-weight: 600;
     cursor: pointer;
 }
 
+.btn:hover {
+    background: linear-gradient(to right, #003366, #005bb5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.3);
 .btn:hover {
     background: linear-gradient(to right, #003366, #005bb5);
     transform: translateY(-2px);
@@ -120,18 +174,24 @@ a:hover {
 .esqueceu-senha-texto {
     text-align: center;
     margin-top: 1rem;
+    text-align: center;
+    margin-top: 1rem;
 }
 
 .texto-esqueci-senha {
+    color: #000;
     color: #000;
 }
 
 .link-esqueci-senha {
     color: #007bff;
+    color: #007bff;
     cursor: pointer;
 }
 
 .link-esqueci-senha:hover {
+    color: #0056b3;
+    text-decoration: underline;
     color: #0056b3;
     text-decoration: underline;
 }

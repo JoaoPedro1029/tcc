@@ -9,9 +9,6 @@ if (!isset($_SESSION['professor_id'])) {
 
 // Conexão com o banco
 include '../conexao.php';
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
-}
 
 // Função para converter data de d/m/Y para Y-m-d
 function converterDataParaBD($data)
@@ -48,17 +45,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $stmt = $conn->prepare("UPDATE emprestimo SET id_aluno = ?, id_livro = ?, data_emprestimo = ?, data_devolucao = ? WHERE id = ?");
-    $stmt->bind_param("iissi", $id_aluno, $id_livro, $data_emprestimo, $data_devolucao, $id_emprestimo);
+    $stmt = $pdo->prepare("UPDATE emprestimo SET id_aluno = ?, id_livro = ?, data_emprestimo = ?, data_devolucao = ? WHERE id = ?");
 
-    if ($stmt->execute()) {
+    if ($stmt->execute([$id_aluno, $id_livro, $data_emprestimo, $data_devolucao, $id_emprestimo])) {
         $_SESSION['mensagem_editar_emprestimo'] = "<p style='color: green;'>Empréstimo atualizado com sucesso!</p>";
     } else {
-        $_SESSION['mensagem_editar_emprestimo'] = "<p style='color: red;'>Erro ao atualizar: " . $stmt->error . "</p>";
+        $errorInfo = $stmt->errorInfo();
+        $_SESSION['mensagem_editar_emprestimo'] = "<p style='color: red;'>Erro ao atualizar: " . $errorInfo[2] . "</p>";
     }
 
-    $stmt->close();
-    $conn->close();
+    $pdo = null;
 
     // Redireciona para o front para mostrar a mensagem
     header("Location: ../frontend/editar_emprestimo_front.php?id=$id_emprestimo");
@@ -66,23 +62,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Se não for POST, busca os dados do empréstimo para exibir no front (pode ser usado para carregar os dados inicialmente)
-$stmt = $conn->prepare("SELECT e.id, e.id_aluno, e.id_livro, e.data_emprestimo, e.data_devolucao, a.nome AS aluno_nome, l.nome_livro
+$stmt = $pdo->prepare("SELECT e.id, e.id_aluno, e.id_livro, e.data_emprestimo, e.data_devolucao, a.nome AS aluno_nome, l.nome_livro
                         FROM emprestimo e
                         JOIN aluno a ON e.id_aluno = a.id
                         JOIN livro l ON e.id_livro = l.id
                         WHERE e.id = ?");
-$stmt->bind_param("i", $id_emprestimo);
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt->execute([$id_emprestimo]);
+$emprestimo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($result->num_rows === 0) {
+if (!$emprestimo) {
     $_SESSION['mensagem_editar_emprestimo'] = "<p style='color: red;'>Empréstimo não encontrado.</p>";
     header("Location: ../frontend/editar_emprestimo_front.php");
     exit();
 }
 
-$emprestimo = $result->fetch_assoc();
-
-$stmt->close();
-$conn->close();
+$pdo = null;
 ?>

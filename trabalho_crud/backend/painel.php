@@ -13,13 +13,6 @@ if (!isset($_SESSION['professor_id'])) {
 // Conectar com o banco de dados
 include '../conexao.php';
 
-// Verifica a conexão
-if ($conn->connect_error) {
-    http_response_code(500); // Internal Server Error
-    echo json_encode(["error" => "Falha na conexão com o banco de dados"]);
-    exit();
-}
-
 // Primeiro nome do professor logado no painel
 if (!isset($_SESSION['professor_primeiro_nome']) && isset($_SESSION['professor_nome'])) {
     $nomeCompleto = trim($_SESSION['professor_nome']);
@@ -30,5 +23,5 @@ echo json_encode([
     "professor_primeiro_nome" => $_SESSION['professor_primeiro_nome']
 ]);
 
-$conn->close();
+$pdo = null;
 ?>

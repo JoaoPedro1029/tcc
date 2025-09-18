@@ -9,6 +9,7 @@
     <link rel="icon" href="../imagens/1748908346791.png" type="image/x-icon">
 
     <link rel="stylesheet" href="../estilos/login.css">
+    <link rel="stylesheet" href="../estilos/painel.css"> 
 </head>
 
 <body class="body">
@@ -24,7 +25,7 @@
     <div class="container">
 
         <div class="text-center">
-            <h1 class="h1" style="font-size: 30px;">Login do Professor</h1>
+            <h1 class="h1">Login do Professor</h1>
         </div>
 
         <?php if (!empty($erro)): ?>
@@ -36,18 +37,17 @@
         <form action="../backend/login.php" method="POST">
             <div class="mb-3">
                 <label for="cpf" class="form-label">CPF:</label>
-                <input type="text" name="cpf" id="cpf" class="form-control shadow-sm" autocomplete="off" required>
+                <input type="text" name="cpf" id="cpf" class="form-control" autocomplete="on" required>
             </div>
             <div class="mb-3">
                 <label for="senha" class="form-label">Senha:</label>
-                <input type="password" name="senha" id="senha" class="form-control shadow-sm" autocomplete="off" required>
+                <input type="password" name="senha" id="senha" class="form-control" autocomplete="off" required>
             </div>
-            <button type="submit" class="login-container button" style="margin-top: 30px;">Entrar</button>
+            <button type="submit" class="btn">Entrar</button> <!-- Updated button class -->
         </form>
 
     </div>
 
-    <!-- Mensagem canto superior direito -->
     <div class="mensagem-topo">
         <p>
             <strong>Ainda não possui uma conta? Use:</strong><br>
@@ -65,7 +65,7 @@
     ?>
 
     <footer style="text-align: center; position: fixed; bottom: 0; color: black;">
-        <p>&copy; 2025 Mateus Marcelino.</p>
+        <p>&copy; 2025 João Pedro.</p>
     </footer>
 
     <script>
@@ -90,9 +90,6 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Link para arquivos JS -->
-    <script src="../interatividade/devtools_block.js"></script>
 </body>
 
 </html>

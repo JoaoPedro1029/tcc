@@ -8,39 +8,37 @@ if (!isset($_SESSION['professor_id'])) {
     exit();
 }
 
-// Conexão com o banco de dados
-include '../conexao.php';
+include '../conexao.php'; 
 
-// Verifica se ocorreu erro na conexão
-if ($conn->connect_error) {
-    die("Falha na conexão com o banco de dados: " . $conn->connect_error);
-}
+try {
+    // Consulta SQL para buscar todos os empréstimos com dados relacionados
+    $sql = "SELECT e.id, e.data_emprestimo, e.data_devolucao, e.status, 
+                   a.nome AS aluno_nome, l.nome_livro, l.nome_autor, 
+                   p.nome AS professor_nome
+            FROM emprestimo e
+            JOIN aluno a ON e.id_aluno = a.id
+            JOIN livro l ON e.id_livro = l.id
+            JOIN professor p ON e.id_professor = p.id";
 
-// Consulta SQL para buscar todos os empréstimos com dados relacionados
-$sql = "SELECT e.id, e.data_emprestimo, e.data_devolucao, e.status, 
-               a.nome AS aluno_nome, l.nome_livro, l.nome_autor, 
-               p.nome AS professor_nome
-        FROM emprestimo e
-        JOIN aluno a ON e.id_aluno = a.id
-        JOIN livro l ON e.id_livro = l.id
-        JOIN professor p ON e.id_professor = p.id";
+    $result = $pdo->query($sql);
 
-$result = $conn->query($sql);
+    // Verifica se foi solicitada remoção de um empréstimo
+    if (isset($_GET['remover'])) {
+        $id_emprestimo = intval($_GET['remover']); // Garante que seja um número inteiro
+        $sql_remover = "DELETE FROM emprestimo WHERE id = :id";
 
-// Verifica se foi solicitada remoção de um empréstimo
-if (isset($_GET['remover'])) {
-    $id_emprestimo = intval($_GET['remover']); // Garante que seja um número inteiro
-    $sql_remover = "DELETE FROM emprestimo WHERE id = $id_emprestimo";
-
-    if ($conn->query($sql_remover) === TRUE) {
-        // Redireciona após remoção
-        header("Location: ../frontend/ver_emprestimos_front.php");
-        exit();
-    } else {
-        echo "Erro ao remover o empréstimo: " . $conn->error;
+        $stmt = $pdo->prepare($sql_remover);
+        if ($stmt->execute(['id' => $id_emprestimo])) {
+            // Redireciona após remoção
+            header("Location: ../frontend/ver_emprestimos_front.php");
+            exit();
+        } else {
+            echo "Erro ao remover o empréstimo.";
+        }
     }
+} catch (PDOException $e) {
+    echo "Erro no banco de dados: " . $e->getMessage();
 }
 
-// Fecha a conexão
-$conn->close();
+// PDO não requer fechamento explícito da conexão
 ?>

@@ -1,5 +1,15 @@
 <?php
-include '../backend/ver_alunos.php'; // Inclui o script de backend para ver alunos
+include '../conexao.php'; // Inclui o script de backend para ver alunos
+
+// Buscar alunos diretamente do banco
+try {
+    $sql = "SELECT id, nome, serie, email FROM aluno ORDER BY nome";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Erro ao buscar alunos: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +65,7 @@ include '../backend/ver_alunos.php'; // Inclui o script de backend para ver alun
         <h2 class="text-center">Lista de Alunos</h2>
 
         <div class="text-end mb-2">
-            <a href="cadastrar_aluno_front.php" class="link-registrar">Cadastrar Aluno</a>
+            <a href="cadastrar_aluno_front.php" class="btn">Cadastrar Aluno</a>
         </div>
 
         <div class="table-container">
@@ -70,16 +80,15 @@ include '../backend/ver_alunos.php'; // Inclui o script de backend para ver alun
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td class='scrollable-cell'>" . $row['nome'] . "</td>";
-                        echo "<td class='scrollable-cell'>" . $row['serie'] . "</td>";
-                        echo "<td class='scrollable-cell'>" . $row['email'] . "</td>";
-                        echo "<td class='scrollable-cell'><a href='editar_aluno_front.php?id=" . $row['id'] . "' class='edit-link'>Editar</a></td>";
-                        echo "<td class='scrollable-cell'><a href='?remover=" . $row['id'] . "' class='delete-link' onclick='return confirm(\"Tem certeza de que deseja remover este aluno?\")'>Remover</a></td>";
-                    }
-                    ?>
+                    <?php foreach ($alunos as $aluno): ?>
+                        <tr>
+                            <td class='scrollable-cell'><?php echo htmlspecialchars($aluno['nome']); ?></td>
+                            <td class='scrollable-cell'><?php echo htmlspecialchars($aluno['serie']); ?></td>
+                            <td class='scrollable-cell'><?php echo htmlspecialchars($aluno['email']); ?></td>
+                            <td class='scrollable-cell'><a href='editar_aluno_front.php?id=<?php echo $aluno['id']; ?>' class='edit-link'>Editar</a></td>
+                            <td class='scrollable-cell'><a href='?remover=<?php echo $aluno['id']; ?>' class='delete-link' onclick='return confirm("Tem certeza de que deseja remover este aluno?")'>Remover</a></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

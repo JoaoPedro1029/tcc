@@ -49,15 +49,13 @@ include '../backend/ver_emprestimos.php'; // Inclui o script de backend para bus
         </ul>
     </div>
 
-    <!-- Botão para registrar empréstimo -->
-    <a href="registrar_emprestimo.php" class="link-registrar">Registrar Empréstimo</a>
 
     <!-- Conteúdo principal -->
     <div class="container">
         <h2 class="text-center">Lista de Empréstimos</h2>
 
         <div class="text-end mb-3">
-            <a href="registrar_emprestimo_front.php" class="link-registrar">Registrar Empréstimo</a>
+            <a href="registrar_emprestimo_front.php" class="btn">Registrar Empréstimo</a>
         </div>
 
         <div class="table-container">
@@ -81,7 +79,7 @@ include '../backend/ver_emprestimos.php'; // Inclui o script de backend para bus
                     $hoje = date('Y-m-d');
 
                     // Itera sobre todos os empréstimos retornados pela consulta
-                    while ($emprestimo = $result->fetch_assoc()):
+                    while ($emprestimo = $result->fetch(PDO::FETCH_ASSOC)):
                         // Determina o status textual e a classe CSS
                         $status = '';
                         $classeStatus = '';

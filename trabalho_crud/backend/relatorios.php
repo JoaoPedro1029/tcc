@@ -1,9 +1,6 @@
 <?php
 // Conexão com o banco
 include '../conexao.php';
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
-}
 
 // Verifica se o usuário está logado
 session_start();
@@ -24,8 +21,9 @@ $sqlAlunos = "SELECT a.nome AS aluno_nome, COUNT(e.id) AS total
               GROUP BY e.id_aluno
               ORDER BY total DESC
               LIMIT 5";
-$resultAlunos = $conn->query($sqlAlunos);
-$temAlunos = $resultAlunos->num_rows > 0;
+$resultAlunos = $pdo->query($sqlAlunos);
+$alunosData = $resultAlunos->fetchAll(PDO::FETCH_ASSOC);
+$temAlunos = count($alunosData) > 0;
 
 // Consulta 2: Livros mais lidos
 $sqlLivros = "SELECT l.nome_livro, COUNT(e.id) AS total
@@ -35,8 +33,9 @@ $sqlLivros = "SELECT l.nome_livro, COUNT(e.id) AS total
               GROUP BY e.id_livro
               ORDER BY total DESC
               LIMIT 5";
-$resultLivros = $conn->query($sqlLivros);
-$temLivros = $resultLivros->num_rows > 0;
+$resultLivros = $pdo->query($sqlLivros);
+$livrosData = $resultLivros->fetchAll(PDO::FETCH_ASSOC);
+$temLivros = count($livrosData) > 0;
 
 // Consulta 3: Séries que mais leram
 $sqlSeries = "SELECT a.serie, COUNT(e.id) AS total
@@ -46,15 +45,17 @@ $sqlSeries = "SELECT a.serie, COUNT(e.id) AS total
               GROUP BY a.serie
               ORDER BY total DESC
               LIMIT 5";
-$resultSeries = $conn->query($sqlSeries);
-$temSeries = $resultSeries->num_rows > 0;
+$resultSeries = $pdo->query($sqlSeries);
+$seriesData = $resultSeries->fetchAll(PDO::FETCH_ASSOC);
+$temSeries = count($seriesData) > 0;
 
 // Consulta para observações
 $sqlNotas = "SELECT n.id, n.texto, n.data, p.nome AS professor_nome, CONVERT_TZ(data, '+00:00', '-05:00') AS data_corrigida
              FROM anotacoes n
              JOIN professor p ON n.id_professor = p.id
              ORDER BY n.data DESC";
-$resultNotas = $conn->query($sqlNotas);
-$temNotas = $resultNotas->num_rows > 0;
+$resultNotas = $pdo->query($sqlNotas);
+$notasData = $resultNotas->fetchAll(PDO::FETCH_ASSOC);
+$temNotas = count($notasData) > 0;
 
 ?>
