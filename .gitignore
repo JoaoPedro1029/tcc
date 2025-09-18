@@ -1,9 +1,0 @@
-# Arquivos de ambiente
-.env
-# Arquivo do banco de dados
-crud_db.sql
-# Arquivos composer
-composer.json
-composer.lock
-# Pasta de vendor
-vendor/

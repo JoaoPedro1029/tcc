@@ -7,10 +7,10 @@ require_once 'load_env.php';
 loadEnv(__DIR__ . '/.env');
 
 // Obtém as variáveis de ambiente para conexão com o banco de dados
-$host = $_ENV['HOST'];       // Endereço do servidor de banco de dados
-$usuario = $_ENV['USUARIO']; // Nome de usuário do banco
-$senha = $_ENV['SENHA'];     // Senha do banco
-$banco = $_ENV['BANCO'];     // Nome do banco de dados
+$host = 'localhost';       // Endereço do servidor de banco de dados
+$usuario = 'root'; // Nome de usuário do banco
+$senha = '';     // Senha do banco
+$banco = 'crud_db';     // Nome do banco de dados
 
 try {
     // Tenta estabelecer a conexão com o banco de dados usando PDO

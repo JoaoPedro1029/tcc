@@ -50,7 +50,7 @@ $seriesData = $resultSeries->fetchAll(PDO::FETCH_ASSOC);
 $temSeries = count($seriesData) > 0;
 
 // Consulta para observações
-$sqlNotas = "SELECT n.id, n.texto, n.data, p.nome AS professor_nome, CONVERT_TZ(data, '+00:00', '-03:00') AS data_corrigida
+$sqlNotas = "SELECT n.id, n.texto, n.data, p.nome AS professor_nome, CONVERT_TZ(data, '+00:00', '-05:00') AS data_corrigida
              FROM anotacoes n
              JOIN professor p ON n.id_professor = p.id
              ORDER BY n.data DESC";

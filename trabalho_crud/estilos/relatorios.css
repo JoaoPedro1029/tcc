@@ -1,188 +1,188 @@
 /* CONTAINER PRINCIPAL */
 .relatorios-principal {
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-    margin-top: 120px;
-    padding: 30px;
-    box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 120px;
+  padding: 30px;
+  box-sizing: border-box;
 }
 
 .relatorios-container {
-  margin-right: 320px; /* espaço para a sidebar */
-  margin-top: 700px;
-  overflow: auto;
-  padding: 100px;
+margin-right: 320px; /* espaço para a sidebar */
+margin-top: 700px;
+overflow: auto;
+padding: 100px;
 }
 
 /* GRAFICO */
 .grafico {
-    background: white;
-    width: 98%;
-    max-width: 1000px;
-    padding: 40px;
-    border-radius: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-size: 24px;
-    margin: 120px auto 0 auto; /* ISSO CENTRALIZA */
+  background: white;
+  width: 98%;
+  max-width: 1000px;
+  padding: 40px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 24px;
+  margin: 120px auto 0 auto; /* ISSO CENTRALIZA */
 }
 
 /* SIDEBAR */
 .barra-lateral {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: calc(100vh - 80px);
-  width: 400px;
-  background-color: #f8f9fa;
-  padding: 20px;
-  overflow-y: none;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  margin-top: 80px;
+position: fixed;
+top: 0;
+right: 0;
+height: calc(100vh - 80px);
+width: 400px;
+background-color: #f8f9fa;
+padding: 20px;
+overflow-y: none;
+box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+display: flex;
+flex-direction: column;
+margin-top: 80px;
 }
 
 
 
 /* LISTA DENTRO DA SIDEBAR */
 .lista-observacoes {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding-right: 10px;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 /* BOTÃO */
 .btn {
-  display: inline-block; /* para que não cresça na largura do container */
-  width: auto; /* para respeitar o conteúdo */
-  max-width: 600px; /* limite máximo se quiser */
-  padding: 12px 24px;
-  border-radius: 50px;
-  background-color: #004080;
-  color: white;
-  cursor: pointer;
-  text-align: center;
-  margin-top: 20px;
-  font-weight: 500;
-  border: none;
+display: inline-block; /* para que não cresça na largura do container */
+width: auto; /* para respeitar o conteúdo */
+max-width: 600px; /* limite máximo se quiser */
+padding: 12px 24px;
+border-radius: 50px;
+background-color: #004080;
+color: white;
+cursor: pointer;
+text-align: center;
+margin-top: 20px;
+font-weight: 500;
+border: none;
 }
 
 
 .btn:hover {
-    background: #002b5c;
-    color: #fff;
+  background: #002b5c;
+  color: #fff;
 }
 
 .card {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    margin-top: 40px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  margin-top: 40px;
 }
-  
+
 .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #004080;
-  color: #fff;
-  height: 30px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+background-color: #004080;
+color: #fff;
+height: 30px;
 }
 
 .card-header strong {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 50%;
-  display: inline-block;
-  vertical-align: middle;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+max-width: 50%;
+display: inline-block;
+vertical-align: middle;
 }
 
 .data-anotacao {
-  color: white;
-  font-size: 0.9em;
-  padding-right: 30px; /* Espaço para o botão de excluir */
-  display: inline-block; /* garante que ocupe espaço horizontal */
+color: white;
+font-size: 0.9em;
+padding-right: 30px; /* Espaço para o botão de excluir */
+display: inline-block; /* garante que ocupe espaço horizontal */
 }
 
-  .card-text {
-    font-size: 18px;
-    color: #000000;
-  }
+.card-text {
+  font-size: 18px;
+  color: #000000;
+}
 
 .card-header .text-muted {
-  color: white; /* Texto da data também branco */
+color: white; /* Texto da data também branco */
 }
 
 .observacao-container {
-  background-color: #f9f9f9;
-  } 
+background-color: #f9f9f9;
+} 
 
 .btn-excluir {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  width: 30px;
-  height: 30px;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+position: absolute;
+top: 0px;
+right: 0px;
+background-color: #dc3545;
+color: white;
+border: none;
+width: 30px;
+height: 30px;
+font-size: 16px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
 }
 
 .nova-anotacao {
-    margin-top: auto;
+  margin-top: auto;
 }
 
 .alert {
-    color: rgb(0, 0, 0);
-    font-size: 18px;
-    margin-top: 20px;
-    text-align: center;
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .btn-group-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 70px;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 70px;
 }
 
 
 .btn-sal {
-    background-color: #004080;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    right: 200px;
+  background-color: #004080;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  right: 200px;
 }
 
 .btn-sal:hover {
-    background-color: #002b5c;
+  background-color: #002b5c;
 }
 
 .btn-can {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .btn-can:hover {
-    background-color: #c82333;
+  background-color: #c82333;
 }
